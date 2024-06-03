@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=3 uid="uid://bymsuau0wuqdh"]
+
+[ext_resource type="Script" path="res://scripts/bulletDefault.gd" id="1_swi5t"]
+[ext_resource type="Texture2D" uid="uid://cwb8fehea7ktu" path="res://assets/sprites/bulletGood.png" id="2_ghfp7"]
+[ext_resource type="Texture2D" uid="uid://c40cdnmn1yc0f" path="res://assets/sprites/lights.png" id="3_0adg3"]
+[ext_resource type="Texture2D" uid="uid://iixp444tjowo" path="res://assets/sprites/circle.png" id="4_fnbdr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cj8as"]
+radius = 5.09902
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yeydr"]
+particle_flag_disable_z = true
+spread = 65.0
+initial_velocity_min = 50.0
+initial_velocity_max = 50.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.02
+scale_max = 0.02
+color = Color(0.309804, 1, 1, 1)
+
+[node name="Area2D" type="Area2D"]
+top_level = true
+script = ExtResource("1_swi5t")
+group = "enemies"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_ghfp7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_cj8as")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(1, 1)
+scale = Vector2(0.195312, 0.195312)
+color = Color(0, 0.66002, 0.664697, 1)
+texture = ExtResource("3_0adg3")
+
+[node name="DeathExplosion" type="GPUParticles2D" parent="."]
+visible = false
+emitting = false
+amount = 35
+process_material = SubResource("ParticleProcessMaterial_yeydr")
+texture = ExtResource("4_fnbdr")
+lifetime = 0.2
+one_shot = true
+explosiveness = 0.9

@@ -1,0 +1,130 @@
+[gd_scene load_steps=17 format=3 uid="uid://cqhh83w7womh8"]
+
+[ext_resource type="Texture2D" uid="uid://xwmfh1nuwwe8" path="res://assets/sprites/enemyCross.png" id="1_v2ioi"]
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_y20n6"]
+[ext_resource type="Shader" path="res://assets/shader/hitShader.gdshader" id="2_jrwqi"]
+[ext_resource type="Texture2D" uid="uid://c40cdnmn1yc0f" path="res://assets/sprites/lights.png" id="2_xhub5"]
+[ext_resource type="Script" path="res://scripts/gunHolder.gd" id="4_3c1mk"]
+[ext_resource type="PackedScene" uid="uid://bmcjac3l24vwc" path="res://scenes/prefabs/gun.tscn" id="4_hhpuw"]
+[ext_resource type="PackedScene" uid="uid://ymmqbd20y7pd" path="res://scenes/prefabs/baddyBulletDefault.tscn" id="5_b15a1"]
+[ext_resource type="PackedScene" uid="uid://cr0cua4fem14p" path="res://scenes/prefabs/health_bar.tscn" id="8_cdcuc"]
+
+[sub_resource type="Gradient" id="Gradient_735qv"]
+colors = PackedColorArray(0.960784, 0.0431373, 0.00784314, 1, 0.960784, 0.607843, 0.00784314, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_obe1a"]
+gradient = SubResource("Gradient_735qv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7mqjh"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 70.0
+initial_velocity_max = 70.0
+gravity = Vector3(0, 0, 0)
+scale_max = 3.0
+color_ramp = SubResource("GradientTexture1D_obe1a")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d0psd"]
+shader = ExtResource("2_jrwqi")
+shader_parameter/amount = 0.0
+shader_parameter/color = Vector3(1, 1, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dji21"]
+
+[sub_resource type="Animation" id="Animation_p1ttq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/amount")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_sep0p"]
+resource_name = "hit"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/amount")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1.36604, 1),
+"update": 0,
+"values": [0.0, 1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8bsj4"]
+_data = {
+"RESET": SubResource("Animation_p1ttq"),
+"hit": SubResource("Animation_sep0p")
+}
+
+[node name="Enemy" type="CharacterBody2D"]
+script = ExtResource("1_y20n6")
+speed = 50.0
+detection_range = 1000.0
+attack_speed = 1.0
+
+[node name="Hit particles" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_7mqjh")
+lifetime = 0.4
+one_shot = true
+preprocess = 0.3
+explosiveness = 0.67
+collision_base_size = 2.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_d0psd")
+texture = ExtResource("1_v2ioi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_dji21")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(-1, -4)
+scale = Vector2(4.60379, 4.60379)
+color = Color(1, 0.380392, 0.439216, 1)
+energy = 0.56
+texture = ExtResource("2_xhub5")
+texture_scale = 0.14
+
+[node name="Guns" type="Node2D" parent="."]
+script = ExtResource("4_3c1mk")
+
+[node name="Gun" parent="Guns" instance=ExtResource("4_hhpuw")]
+position = Vector2(11.5, -0.5)
+obj_bullet = ExtResource("5_b15a1")
+
+[node name="Gun2" parent="Guns" instance=ExtResource("4_hhpuw")]
+position = Vector2(0.5, 8)
+rotation = 1.5708
+obj_bullet = ExtResource("5_b15a1")
+
+[node name="Gun3" parent="Guns" instance=ExtResource("4_hhpuw")]
+position = Vector2(0, -10)
+rotation = -1.5708
+obj_bullet = ExtResource("5_b15a1")
+
+[node name="Gun4" parent="Guns" instance=ExtResource("4_hhpuw")]
+position = Vector2(-11, -0.5)
+rotation = -3.14159
+obj_bullet = ExtResource("5_b15a1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_8bsj4")
+}
+
+[node name="HealthBar" parent="." instance=ExtResource("8_cdcuc")]
+position = Vector2(1, 0)

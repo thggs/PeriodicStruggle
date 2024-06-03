@@ -1,0 +1,120 @@
+[gd_scene load_steps=14 format=3 uid="uid://2exvxhx8etfy"]
+
+[ext_resource type="Texture2D" uid="uid://cqct142h2nv6d" path="res://assets/sprites/ship.png" id="1_eamlj"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_hh8nh"]
+[ext_resource type="Texture2D" uid="uid://c40cdnmn1yc0f" path="res://assets/sprites/lights.png" id="3_05aj6"]
+[ext_resource type="Texture2D" uid="uid://iixp444tjowo" path="res://assets/sprites/circle.png" id="3_r4gvk"]
+[ext_resource type="Script" path="res://scripts/gunHolder.gd" id="3_sp12r"]
+[ext_resource type="PackedScene" uid="uid://bymsuau0wuqdh" path="res://scenes/prefabs/bulletDefault.tscn" id="4_aabhg"]
+[ext_resource type="PackedScene" uid="uid://bmcjac3l24vwc" path="res://scenes/prefabs/gun.tscn" id="5_k5hsc"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_btcpf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yjhdw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dfghu"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_75bu3"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 0.3
+initial_velocity_max = 0.3
+gravity = Vector3(0, 0, 0)
+scale_min = 0.05
+scale_max = 0.1
+color = Color(0, 0.0980392, 0.164706, 0.196078)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fy5s6"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 0.3
+initial_velocity_max = 0.3
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_max = 0.5
+color = Color(0.400442, 0.194443, 0.300244, 0.0666667)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_oq5th"]
+polygon = PackedVector2Array(-10, 0, -9, 12, 0, 15, 9, 12, 10, 0, 0, -6)
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+script = ExtResource("1_hh8nh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_btcpf")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_yjhdw")
+texture = ExtResource("1_eamlj")
+
+[node name="Guns" type="Node2D" parent="Sprite"]
+script = ExtResource("3_sp12r")
+
+[node name="Gun" parent="Sprite/Guns" instance=ExtResource("5_k5hsc")]
+position = Vector2(-8, -11)
+rotation = -1.5708
+obj_bullet = ExtResource("4_aabhg")
+
+[node name="Gun2" parent="Sprite/Guns" instance=ExtResource("5_k5hsc")]
+position = Vector2(6.17, -10.905)
+rotation = -1.5708
+obj_bullet = ExtResource("4_aabhg")
+
+[node name="Gun3" parent="Sprite/Guns" instance=ExtResource("5_k5hsc")]
+position = Vector2(-14, -11)
+rotation = -1.5708
+obj_bullet = ExtResource("4_aabhg")
+
+[node name="Gun4" parent="Sprite/Guns" instance=ExtResource("5_k5hsc")]
+position = Vector2(12, -11)
+rotation = -1.5708
+obj_bullet = ExtResource("4_aabhg")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
+limit_left = -5408
+limit_top = -5264
+limit_right = 7424
+limit_bottom = 6569
+limit_smoothed = true
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Camera2D"]
+z_index = -100
+material = SubResource("ShaderMaterial_dfghu")
+position = Vector2(-269, 277)
+scale = Vector2(100, 100)
+amount = 1000
+process_material = SubResource("ParticleProcessMaterial_75bu3")
+texture = ExtResource("3_r4gvk")
+lifetime = 406.28
+preprocess = 600.0
+randomness = 0.86
+collision_base_size = 0.0
+
+[node name="GPUParticles2D2" type="GPUParticles2D" parent="Camera2D"]
+z_index = -100
+position = Vector2(479, -203)
+scale = Vector2(100, 100)
+amount = 1000
+process_material = SubResource("ParticleProcessMaterial_fy5s6")
+texture = ExtResource("3_r4gvk")
+lifetime = 406.28
+preprocess = 600.0
+randomness = 0.86
+collision_base_size = 0.0
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(-8.18672, 1.81328)
+scale = Vector2(8.58333, 8.58333)
+energy = 0.66
+texture = ExtResource("3_05aj6")
+texture_scale = 0.14
+metadata/_edit_lock_ = true
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_oq5th")
+
+[editable path="Sprite/Guns/Gun"]
+[editable path="Sprite/Guns/Gun2"]
+[editable path="Sprite/Guns/Gun3"]
+[editable path="Sprite/Guns/Gun4"]
