@@ -18,7 +18,7 @@ var push_force : Vector2 = Vector2.ZERO
 
 func _ready():
 	timer.set_wait_time(attack_speed)
-	var shoot_callable = Callable(self,"shoot")	
+	var shoot_callable = Callable(self,"shoot")
 	timer.connect("timeout", shoot_callable)
 	self.add_child(timer)
 	timer.start()
@@ -31,7 +31,7 @@ func _physics_process(delta):
 	if push_force.length() > 0.1 :
 		push_force = lerp(push_force, Vector2.ZERO, delta * 10)
 		velocity = push_force
-		move_and_slide()		
+		move_and_slide()
 		return
 	
 	rotate(0.01)
@@ -50,7 +50,7 @@ func _physics_process(delta):
 	else:
 		$CollisionShape2D.disabled = true
 		if get_node("Guns").is_empty():
-			queue_free()	
+			queue_free()
 
 func shoot():
 	if in_range:
@@ -68,7 +68,7 @@ func hit(hit : Node):
 	$AnimationPlayer.play("hit")
 	knockback(hit_dir)
 	$"Hit particles".emitting = true
-		
+	
 	if(currentHp <= 0):
 		timer.stop()
 		$PointLight2D.visible = false
@@ -79,7 +79,3 @@ func hit(hit : Node):
 	
 func knockback(dir : Vector2):
 	push_force = -(dir) * 100
-	
-		
-		
-	
