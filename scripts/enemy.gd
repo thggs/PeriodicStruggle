@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@onready var player = get_tree().get_nodes_in_group("players")[0]
+@onready var player
 @onready var timer =  Timer.new()
 
 @export var speed : float
@@ -17,6 +17,7 @@ var in_range
 var push_force : Vector2 = Vector2.ZERO
 
 func _ready():
+	player = get_tree().get_first_node_in_group("players")
 	timer.set_wait_time(attack_speed)
 	var shoot_callable = Callable(self,"shoot")
 	timer.connect("timeout", shoot_callable)
@@ -37,7 +38,11 @@ func _physics_process(delta):
 	rotate(0.01)
 	
 	if !is_dead: 
-		target_pos = player.position
+		if player != null:
+			target_pos = player.position
+		else:
+			target_pos = get_viewport_rect().size/2
+			detection_range = 10000000
 		var pos = (target_pos - position).normalized()
 		
 		velocity = Vector2(pos * speed)
