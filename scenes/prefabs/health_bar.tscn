@@ -57,21 +57,26 @@ _data = {
 }
 
 [node name="HealthBar" type="Node2D"]
+position = Vector2(0, -0.5)
 script = ExtResource("1_d8f71")
 
 [node name="Sprite2D2" type="Sprite2D" parent="."]
-self_modulate = Color(1, 1, 1, 0)
-position = Vector2(-0.470181, -17.9683)
+self_modulate = Color(1, 1, 1, 0.833333)
+position = Vector2(4, -0.5)
 rotation = 1.5708
-scale = Vector2(0.448785, 2.5331)
+scale = Vector2(0.4, 2.25)
 texture = ExtResource("1_1b1ch")
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
-self_modulate = Color(1, 1, 1, 0)
-offset_left = -14.0
-offset_top = -16.0
-offset_right = -10.0
-offset_bottom = 11.0
+self_modulate = Color(1, 1, 1, 0.833333)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -8.0
+offset_top = -4.5
+offset_right = -4.0
+offset_bottom = 19.5
+grow_horizontal = 2
 rotation = -1.5708
 size_flags_vertical = 1
 size_flags_stretch_ratio = 0.0
@@ -79,9 +84,7 @@ theme_override_styles/background = SubResource("StyleBoxTexture_5njqn")
 theme_override_styles/fill = SubResource("StyleBoxTexture_r3vcx")
 max_value = 5.0
 value = 3.0
-fill_mode = 2
 show_percentage = false
-metadata/_edit_use_anchors_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

@@ -9,7 +9,6 @@ extends CharacterBody2D
 @export var attack_speed : float
 @export var hp : int = 5
 @onready var currentHp : int = hp
-@onready var healthBar = $HealthBar
 var is_dead = false
 var target_pos
 var in_range
@@ -24,8 +23,9 @@ func _ready():
 	self.add_child(timer)
 	timer.set_autostart(true)
 	timer.set_paused(false)
-	healthBar.bar.value = hp
 	timer.start()
+	$Healthbar/Bar.value = hp
+	$Healthbar/Bar.max_value = hp
 
 func _physics_process(delta):
 	
@@ -36,6 +36,7 @@ func _physics_process(delta):
 		return
 	
 	rotate(0.01)
+	$Healthbar.rotate(-0.01)
 	
 	if !is_dead: 
 		if player != null:
@@ -67,8 +68,8 @@ func hit(hit : Node):
 	currentHp -= 1
 	
 	var hit_dir = (position - hit.position).normalized()
-		
-	healthBar.change_value(currentHp)
+	
+	$Healthbar/Bar.value = currentHp
 	
 	$AnimationPlayer.play("hit")
 	knockback(hit_dir)
@@ -79,8 +80,8 @@ func hit(hit : Node):
 		$PointLight2D.visible = false
 		$Sprite2D.visible = false
 		$Sprite2D.set_process(false)
+		$Healthbar.visible = false
 		is_dead = true
-		healthBar.visible = false
 	
 func knockback(dir : Vector2):
 	push_force = -(dir) * 100
