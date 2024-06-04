@@ -22,10 +22,10 @@ func _ready():
 	var shoot_callable = Callable(self,"shoot")
 	timer.connect("timeout", shoot_callable)
 	self.add_child(timer)
-	timer.start()
 	timer.set_autostart(true)
 	timer.set_paused(false)
 	healthBar.bar.value = hp
+	timer.start()
 
 func _physics_process(delta):
 	
