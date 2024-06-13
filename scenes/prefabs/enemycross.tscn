@@ -1,11 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://cqhh83w7womh8"]
+[gd_scene load_steps=18 format=3 uid="uid://cqhh83w7womh8"]
 
 [ext_resource type="Texture2D" uid="uid://xwmfh1nuwwe8" path="res://assets/sprites/enemyCross.png" id="1_v2ioi"]
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_y20n6"]
 [ext_resource type="Shader" path="res://assets/shader/hitShader.gdshader" id="2_jrwqi"]
 [ext_resource type="Texture2D" uid="uid://c40cdnmn1yc0f" path="res://assets/sprites/lights.png" id="2_xhub5"]
 [ext_resource type="Script" path="res://scripts/gunHolder.gd" id="4_3c1mk"]
-[ext_resource type="PackedScene" uid="uid://bmcjac3l24vwc" path="res://scenes/prefabs/gun.tscn" id="4_hhpuw"]
 [ext_resource type="PackedScene" uid="uid://ymmqbd20y7pd" path="res://scenes/prefabs/baddyBulletDefault.tscn" id="5_b15a1"]
 
 [sub_resource type="Gradient" id="Gradient_735qv"]
@@ -92,11 +91,16 @@ ProgressBar/constants/outline_size = 3
 ProgressBar/styles/background = SubResource("StyleBoxFlat_jcbx1")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_5me65")
 
-[node name="Enemy" type="CharacterBody2D"]
+[node name="EnemyCross" type="RigidBody2D"]
+collision_layer = 2
+collision_mask = 5
+mass = 0.01
+gravity_scale = 0.0
+lock_rotation = true
+max_contacts_reported = 1
+contact_monitor = true
 script = ExtResource("1_y20n6")
-speed = 50.0
-detection_range = 1000.0
-attack_speed = 1.0
+bullet_duration = 10.0
 
 [node name="Hit particles" type="GPUParticles2D" parent="."]
 emitting = false
@@ -122,27 +126,27 @@ energy = 0.56
 texture = ExtResource("2_xhub5")
 texture_scale = 0.14
 
+[node name="AttackTimer" type="Timer" parent="."]
+autostart = true
+
 [node name="Guns" type="Node2D" parent="."]
 script = ExtResource("4_3c1mk")
-
-[node name="Gun" parent="Guns" instance=ExtResource("4_hhpuw")]
-position = Vector2(11.5, -0.5)
 obj_bullet = ExtResource("5_b15a1")
 
-[node name="Gun2" parent="Guns" instance=ExtResource("4_hhpuw")]
-position = Vector2(0.5, 8)
+[node name="Gun1" type="Node2D" parent="Guns"]
+position = Vector2(12, -1)
+
+[node name="Gun2" type="Node2D" parent="Guns"]
+position = Vector2(0, 10)
 rotation = 1.5708
-obj_bullet = ExtResource("5_b15a1")
 
-[node name="Gun3" parent="Guns" instance=ExtResource("4_hhpuw")]
-position = Vector2(0, -10)
+[node name="Gun3" type="Node2D" parent="Guns"]
+position = Vector2(-12, -1)
+rotation = 3.14159
+
+[node name="Gun4" type="Node2D" parent="Guns"]
+position = Vector2(0, -12)
 rotation = -1.5708
-obj_bullet = ExtResource("5_b15a1")
-
-[node name="Gun4" parent="Guns" instance=ExtResource("4_hhpuw")]
-position = Vector2(-11, -0.5)
-rotation = -3.14159
-obj_bullet = ExtResource("5_b15a1")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -171,3 +175,7 @@ theme = SubResource("Theme_fq8r7")
 value = 50.0
 show_percentage = false
 metadata/_edit_use_anchors_ = true
+
+[connection signal="attack" from="." to="Guns" method="_on_shoot"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="AttackTimer" to="." method="_on_shooting_timer_timeout"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cj1oa6ucghg0r"]
 
 [ext_resource type="PackedScene" uid="uid://2exvxhx8etfy" path="res://scenes/prefabs/player.tscn" id="1_nkkgs"]
-[ext_resource type="PackedScene" uid="uid://cqhh83w7womh8" path="res://scenes/enemycross.tscn" id="3_0cqci"]
+[ext_resource type="PackedScene" uid="uid://cqhh83w7womh8" path="res://scenes/prefabs/enemycross.tscn" id="3_0cqci"]
 [ext_resource type="Texture2D" uid="uid://y541bedxvveh" path="res://assets/sprites/backcolor.png" id="3_bvdik"]
 
 [node name="main" type="Node2D"]
