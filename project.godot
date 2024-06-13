@@ -25,6 +25,10 @@ window/size/window_width_override=1920
 window/size/window_height_override=1080
 window/stretch/aspect="ignore"
 
+[dotnet]
+
+project/assembly_name="BulletHellGodot"
+
 [input]
 
 move_up={
