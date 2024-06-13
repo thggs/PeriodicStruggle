@@ -2,7 +2,7 @@ extends RigidBody2D
 
 signal attack
 
-@onready var player = get_tree().get_first_node_in_group("players")
+@onready var player = get_tree().get_first_node_in_group("player")
 
 @export var speed : float = 50
 @export var detection_range : float = 1000

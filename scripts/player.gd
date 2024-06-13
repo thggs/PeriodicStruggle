@@ -6,12 +6,9 @@ extends CharacterBody2D
 
 signal shoot(bullet_speed)
 
-# I like to have these scenes start with obj_, to distinguish them from other similarly named variables
-
 @onready var gun = $Guns
 
 var use_mouse_and_keyboard = true
-var kin_body
 
 func _physics_process(_delta):
 
@@ -29,9 +26,7 @@ func _physics_process(_delta):
 	velocity = move_direction * speed
 	
 	move_and_slide()
-	
-func _on_hit():
-	print("Player got hit")
+
 	
 func _process(_delta):
 	if Input.is_action_just_pressed("shoot"):
