@@ -20,7 +20,7 @@ func _process(_delta):
 func _physics_process(delta: float) -> void:
 	move_and_collide(velocity * delta)
  
-func _on_body_entered(body):
+func _on_body_entered(_body):
 	is_dead = true
  
 func _on_lifetime_timeout():
