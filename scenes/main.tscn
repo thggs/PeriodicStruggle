@@ -12,38 +12,18 @@ position = Vector2(1008, 648)
 scale = Vector2(1283.4, 1182.89)
 texture = ExtResource("3_bvdik")
 
-[node name="Player" parent="." groups=["entities", "players"] instance=ExtResource("1_nkkgs")]
-position = Vector2(614, 303)
-
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.0666667, 0.0862745, 0.0156863, 1)
 
-[node name="Enemy4" parent="." groups=["enemies", "entities"] instance=ExtResource("3_0cqci")]
+[node name="Player" parent="." instance=ExtResource("1_nkkgs")]
+position = Vector2(614, 303)
+
+[node name="Camera" type="Camera2D" parent="Player"]
+zoom = Vector2(2, 2)
+
+[node name="Enemy4" parent="." instance=ExtResource("3_0cqci")]
 position = Vector2(837, 189)
 detection_range = 500.0
-attack_speed = 0.1
 hp = 7
 
-[node name="Enemy5" parent="." groups=["enemies", "entities"] instance=ExtResource("3_0cqci")]
-position = Vector2(1380, 703)
-detection_range = 500.0
-attack_speed = 0.1
-hp = 7
-
-[node name="Enemy6" parent="." groups=["enemies", "entities"] instance=ExtResource("3_0cqci")]
-position = Vector2(875, 690)
-detection_range = 500.0
-attack_speed = 0.1
-hp = 7
-
-[node name="Enemy7" parent="." groups=["enemies", "entities"] instance=ExtResource("3_0cqci")]
-position = Vector2(413, 584)
-detection_range = 500.0
-attack_speed = 0.1
-hp = 7
-
-[node name="Enemy8" parent="." groups=["enemies", "entities"] instance=ExtResource("3_0cqci")]
-position = Vector2(197, 299)
-detection_range = 500.0
-attack_speed = 0.1
-hp = 7
+[connection signal="shoot" from="Player" to="Player/Guns" method="shoot"]

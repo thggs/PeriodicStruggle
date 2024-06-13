@@ -1,38 +1,44 @@
 extends CharacterBody2D
 
+@export var bullet_speed : float = 1000
+@export var bullet_duration : float = 5
+@export var speed : float = 150.0
 
-const SPEED = 150.0
+signal shoot(bullet_speed)
 
 # I like to have these scenes start with obj_, to distinguish them from other similarly named variables
-const obj_bullet = preload("res://scenes/prefabs/bulletDefault.tscn") 
 
-@onready var gun = get_node("Sprite/Guns")
+@onready var gun = $Guns
 
-func _physics_process(delta):
+var use_mouse_and_keyboard = true
+var kin_body
 
-	# Get the input direction for both horizontal and vertical movement.
-	var direction = Vector2(Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
-							Input.get_action_strength("move_down") - Input.get_action_strength("move_up"))
+func _physics_process(_delta):
+
+	# Get the input direction for all axis of movement (this vector is already normalized)
+	var move_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var look_direction = Input.get_vector("look_left", "look_right", "look_up", "look_down")
 	
-	# Normalize the direction vector to ensure consistent speed in all directions.
-	if direction.length() > 1:
-		direction = direction.normalized()
+	# Rotate the sprite to face the mouse or joystick.
+	if(use_mouse_and_keyboard):
+		look_at(get_global_mouse_position())
+	else:
+		look_at(look_direction + position)
 	
-	# Rotate the sprite to face the direction it's moving.
-
-	$Sprite.rotation_degrees = rad_to_deg(get_local_mouse_position().angle()) + 90 
-			
 	# Update the velocity based on the input direction and speed.
-	velocity = direction * SPEED
-
-	if Input.is_action_just_pressed("shoot"):
-		shoot($Sprite.rotation_degrees - 90, 1000)
-
-	move_and_slide()
-
-
-func shoot(direction: float, speed: float):
-	gun.shoot(speed)
+	velocity = move_direction * speed
 	
-func hit(hit : Node):
-	pass
+	move_and_slide()
+	
+func _on_hit():
+	print("Player got hit")
+	
+func _process(_delta):
+	if Input.is_action_just_pressed("shoot"):
+		shoot.emit(bullet_speed, bullet_duration)
+		
+func _input(event):
+	if(event is InputEventMouse or event is InputEventKey):
+		use_mouse_and_keyboard = true
+	elif(event is InputEventJoypadButton or event is InputEventJoypadMotion):
+		use_mouse_and_keyboard = false
