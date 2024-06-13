@@ -25,5 +25,3 @@ zoom = Vector2(2, 2)
 position = Vector2(837, 189)
 detection_range = 500.0
 hp = 7
-
-[connection signal="shoot" from="Player" to="Player/Guns" method="shoot"]
