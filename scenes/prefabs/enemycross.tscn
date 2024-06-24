@@ -91,7 +91,7 @@ ProgressBar/constants/outline_size = 3
 ProgressBar/styles/background = SubResource("StyleBoxFlat_jcbx1")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_5me65")
 
-[node name="EnemyCross" type="RigidBody2D"]
+[node name="EnemyCross" type="RigidBody2D" groups=["enemy"]]
 collision_layer = 2
 collision_mask = 5
 mass = 0.01

@@ -1,27 +1,55 @@
-[gd_scene load_steps=4 format=3 uid="uid://cj1oa6ucghg0r"]
+[gd_scene load_steps=6 format=3 uid="uid://cj1oa6ucghg0r"]
 
+[ext_resource type="Script" path="res://scenes/gameManager.gd" id="1_g3u0d"]
 [ext_resource type="PackedScene" uid="uid://2exvxhx8etfy" path="res://scenes/prefabs/player.tscn" id="1_nkkgs"]
 [ext_resource type="PackedScene" uid="uid://cqhh83w7womh8" path="res://scenes/prefabs/enemycross.tscn" id="3_0cqci"]
 [ext_resource type="Texture2D" uid="uid://y541bedxvveh" path="res://assets/sprites/backcolor.png" id="3_bvdik"]
 
-[node name="main" type="Node2D"]
+[sub_resource type="Curve2D" id="Curve2D_r1v4t"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 576, -352, 0, 0, 0, 0, 576, 352, 0, 0, 0, 0, -576, 352, 0, 0, 0, 0, -576, -352, 0, 0, 0, 0, 576, -352)
+}
+point_count = 5
 
-[node name="Background" type="Sprite2D" parent="."]
-z_index = -111
-position = Vector2(1008, 648)
-scale = Vector2(1283.4, 1182.89)
-texture = ExtResource("3_bvdik")
+[node name="main" type="Node2D"]
+script = ExtResource("1_g3u0d")
+enemy_scene = ExtResource("3_0cqci")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.0666667, 0.0862745, 0.0156863, 1)
 
 [node name="Player" parent="." instance=ExtResource("1_nkkgs")]
-position = Vector2(614, 303)
 
 [node name="Camera" type="Camera2D" parent="Player"]
 zoom = Vector2(2, 2)
+process_callback = 0
+position_smoothing_enabled = true
+position_smoothing_speed = 2.0
+drag_left_margin = 0.1
+drag_top_margin = 0.1
+drag_right_margin = 0.1
+drag_bottom_margin = 0.1
+
+[node name="MobSpawnPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_r1v4t")
+
+[node name="MobSpawnLocation" type="PathFollow2D" parent="MobSpawnPath"]
+position = Vector2(576, -352)
+rotation = 1.5708
 
 [node name="Enemy4" parent="." instance=ExtResource("3_0cqci")]
-position = Vector2(837, 189)
+position = Vector2(349, 75)
 detection_range = 500.0
+bullet_duration = 50.0
 hp = 7
+
+[node name="Background" type="Sprite2D" parent="."]
+visible = false
+z_index = -111
+scale = Vector2(1500, 1382.53)
+texture = ExtResource("3_bvdik")
+
+[node name="SpawnTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
