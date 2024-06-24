@@ -27,14 +27,6 @@ func _physics_process(_delta):
 	
 	move_and_slide()
 
-<<<<<<< HEAD
-
-func shoot(direction: float, speed: float):
-	gun.shoot(speed)
-	PlayerData.exp += 1
-=======
->>>>>>> 0fb90d384ea703747fe720a90662a52fe4ea19c8
-	
 func _process(_delta):
 	if Input.is_action_just_pressed("shoot"):
 		shoot.emit(bullet_speed, bullet_duration)

@@ -69,7 +69,7 @@ func _on_body_entered(body):
 	$Healthbar/Bar.value = currentHp
 	
 	if(currentHp <= 0):
-		is_dead = true
+		death()
 		return
 		
 	var hit_dir = (position - body.position).normalized()
@@ -77,7 +77,14 @@ func _on_body_entered(body):
 	$AnimationPlayer.play("hit")
 	
 	if(currentHp <= 0):
-		is_dead = true
+		death()
+
+#Method responsible for handling this enemy's death
+func death():
+	#player gets exp on enemy kill, maybe change this to a 
+	#var later? Maybe difrerent evemies give diferent exp?
+	PlayerData.exp += 5
+	is_dead = true
 
 func get_target_pos():
 	if player != null:

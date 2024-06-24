@@ -1,16 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://cj1oa6ucghg0r"]
+[gd_scene load_steps=7 format=3 uid="uid://cj1oa6ucghg0r"]
 
 [ext_resource type="Script" path="res://scenes/gameManager.gd" id="1_g3u0d"]
 [ext_resource type="PackedScene" uid="uid://2exvxhx8etfy" path="res://scenes/prefabs/player.tscn" id="1_nkkgs"]
 [ext_resource type="PackedScene" uid="uid://cqhh83w7womh8" path="res://scenes/prefabs/enemycross.tscn" id="3_0cqci"]
 [ext_resource type="Texture2D" uid="uid://y541bedxvveh" path="res://assets/sprites/backcolor.png" id="3_bvdik"]
-[ext_resource type="Script" path="res://scripts/UI/base_bar.gd" id="4_ar6eu"]
+[ext_resource type="Script" path="res://scripts/UI/base_bar.gd" id="5_l1xee"]
 
 [sub_resource type="Curve2D" id="Curve2D_r1v4t"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 576, -352, 0, 0, 0, 0, 576, 352, 0, 0, 0, 0, -576, 352, 0, 0, 0, 0, -576, -352, 0, 0, 0, 0, 576, -352)
+"points": PackedVector2Array(0, 0, 0, 0, 576, -352, 0, 0, 0, 0, 576, 352, 0, 0, 0, 0, 232.305, 359.408, 0, 0, 0, 0, -576, 352, 0, 0, 0, 0, -576, -352, 0, 0, 0, 0, 576, -352)
 }
-point_count = 5
+point_count = 6
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_g3u0d")
@@ -22,7 +22,7 @@ color = Color(0.0666667, 0.0862745, 0.0156863, 1)
 [node name="Player" parent="." instance=ExtResource("1_nkkgs")]
 
 [node name="Camera" type="Camera2D" parent="Player"]
-zoom = Vector2(2, 2)
+zoom = Vector2(1.3, 1.3)
 process_callback = 0
 position_smoothing_enabled = true
 position_smoothing_speed = 2.0
@@ -49,6 +49,21 @@ visible = false
 z_index = -111
 scale = Vector2(1500, 1382.53)
 texture = ExtResource("3_bvdik")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+process_priority = 4
+follow_viewport_enabled = true
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer"]
+anchors_preset = -1
+anchor_left = -0.386
+anchor_right = -0.386
+offset_left = 30.56
+offset_top = -177.0
+offset_right = 62.56
+offset_bottom = 161.0
+fill_mode = 3
+script = ExtResource("5_l1xee")
 
 [node name="SpawnTimer" type="Timer" parent="."]
 autostart = true
