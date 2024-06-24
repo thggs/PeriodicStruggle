@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xwmfh1nuwwe8"
-path="res://.godot/imported/enemyCross.png-1a667427a2613836be8e31f3acd84f21.ctex"
+uid="uid://b4qkaetj6jqj0"
+path="res://.godot/imported/ship_spritesheet.png-2f93436db116cc2758ec1f6e82727a4e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/enemyCross.png"
-dest_files=["res://.godot/imported/enemyCross.png-1a667427a2613836be8e31f3acd84f21.ctex"]
+source_file="res://assets/sprites/ship_spritesheet.png"
+dest_files=["res://.godot/imported/ship_spritesheet.png-2f93436db116cc2758ec1f6e82727a4e.ctex"]
 
 [params]
 

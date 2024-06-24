@@ -33,6 +33,7 @@ func _physics_process(delta):
 
 func shoot(direction: float, speed: float):
 	gun.shoot(speed)
+	PlayerData.exp += 1
 	
 func hit(hit : Node):
 	pass

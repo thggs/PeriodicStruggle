@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cr0cua4fem14p"]
 
 [ext_resource type="Texture2D" uid="uid://x85yelasifd4" path="res://assets/sprites/square.png" id="1_1b1ch"]
-[ext_resource type="Script" path="res://scripts/health_bar.gd" id="1_d8f71"]
+[ext_resource type="Script" path="res://scripts/UI/hp_bar.gd" id="1_d8f71"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5njqn"]
 texture = ExtResource("1_1b1ch")
@@ -57,18 +57,17 @@ _data = {
 }
 
 [node name="HealthBar" type="Node2D"]
-position = Vector2(0, -0.5)
 script = ExtResource("1_d8f71")
 
 [node name="Sprite2D2" type="Sprite2D" parent="."]
-self_modulate = Color(1, 1, 1, 0.833333)
+self_modulate = Color(1, 1, 1, 0)
 position = Vector2(4, -0.5)
 rotation = 1.5708
 scale = Vector2(0.4, 2.25)
 texture = ExtResource("1_1b1ch")
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
-self_modulate = Color(1, 1, 1, 0.833333)
+self_modulate = Color(1, 1, 1, 0)
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
