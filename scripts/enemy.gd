@@ -1,14 +1,17 @@
-extends CharacterBody2D
+extends RigidBody2D
 
-@onready var player
-@onready var timer =  Timer.new()
+signal attack
 
-@export var speed : float
-@export var detection_range : float
+@onready var player = get_tree().get_first_node_in_group("player")
 
-@export var attack_speed : float
+@export var speed : float = 50
+@export var detection_range : float = 1000
+@export var bullet_speed : float = 100
+@export var bullet_duration : float = 5
+@export var attack_speed : float = 1
 @export var hp : int = 5
 @onready var currentHp : int = hp
+
 var is_dead = false
 var target_pos
 var in_range
@@ -16,72 +19,75 @@ var in_range
 var push_force : Vector2 = Vector2.ZERO
 
 func _ready():
-	player = get_tree().get_first_node_in_group("players")
-	timer.set_wait_time(attack_speed)
-	var shoot_callable = Callable(self,"shoot")
-	timer.connect("timeout", shoot_callable)
-	self.add_child(timer)
-	timer.set_autostart(true)
-	timer.set_paused(false)
-	timer.start()
+	$AttackTimer.set_wait_time(1/attack_speed)
 	$Healthbar/Bar.value = hp
 	$Healthbar/Bar.max_value = hp
+	get_target_pos()
 
 func _physics_process(delta):
 	
 	if push_force.length() > 0.1 :
 		push_force = lerp(push_force, Vector2.ZERO, delta * 10)
-		velocity = push_force
-		move_and_slide()
+		linear_velocity = push_force
 		return
-	
-	rotate(0.01)
-	$Healthbar.rotate(-0.01)
-	
-	if !is_dead: 
-		if player != null:
-			target_pos = player.position
-		else:
-			target_pos = get_viewport_rect().size/2
-			detection_range = 10000000
+		
+	if !is_dead:
+		rotate(delta)
+		$Healthbar.global_rotation = 0.0
+		
 		var pos = (target_pos - position).normalized()
 		
-		velocity = Vector2(pos * speed)
+		linear_velocity = Vector2(pos * speed)
 		
 		in_range = position.distance_to(target_pos) > 3
 		in_range = in_range && position.distance_to(target_pos) < detection_range
 		
 		if(in_range):
-			move_and_slide()
+			pass
+
+func _process(_delta):
+	
+	if !is_dead:
+		get_target_pos()
+		if currentHp == hp:
+			$Healthbar.hide()
+		else:
+			$Healthbar.show()
+
 	else:
-		$CollisionShape2D.disabled = true
-		if get_node("Guns").is_empty():
+		$CollisionShape2D.set_deferred("disabled", true)
+		$AttackTimer.stop()
+		$Sprite2D.hide()
+		$PointLight2D.hide()
+		$Healthbar.hide()
+		if $"Hit particles".emitting == false:
 			queue_free()
 
-func shoot():
-	if in_range:
-		var guns = get_node("Guns").get_children()
-		for g in guns:
-			g.shoot()
-		
-func hit(hit : Node):
+func _on_body_entered(body):
 	currentHp -= 1
-	
-	var hit_dir = (position - hit.position).normalized()
-	
+	$"Hit particles".emitting = true
 	$Healthbar/Bar.value = currentHp
 	
-	$AnimationPlayer.play("hit")
+	if(currentHp <= 0):
+		is_dead = true
+		return
+		
+	var hit_dir = (position - body.position).normalized()
 	knockback(hit_dir)
-	$"Hit particles".emitting = true
+	$AnimationPlayer.play("hit")
 	
 	if(currentHp <= 0):
-		timer.stop()
-		$PointLight2D.visible = false
-		$Sprite2D.visible = false
-		$Sprite2D.set_process(false)
-		$Healthbar.visible = false
 		is_dead = true
-	
+
+func get_target_pos():
+	if player != null:
+		target_pos = player.position
+	else:
+		target_pos = get_viewport_rect().size/2
+		detection_range = 1000000
+
 func knockback(dir : Vector2):
 	push_force = -(dir) * 100
+
+func _on_shooting_timer_timeout():
+	attack.emit(bullet_speed, bullet_duration)

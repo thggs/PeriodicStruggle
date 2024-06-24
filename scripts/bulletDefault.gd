@@ -1,33 +1,28 @@
-extends Area2D
+extends RigidBody2D
  
- 
-var velocity: Vector2 = Vector2()
-var duration = 5
-@export var group : String = "entities"
-
 signal bullet_death
 
+var velocity: Vector2 = Vector2()
+var is_dead = false
+@export var duration : float
+@export var damage : float
 
 func _ready() -> void:
-	var callable = Callable(self, "_on_body_entered")
-	connect("body_entered", callable)
+	$Lifetime.set_wait_time(duration) 
+
+func _process(_delta):
+	if is_dead:
+		$CollisionShape2D.set_deferred("disabled", true)
+		if !$AnimationPlayer.is_playing():
+			hide()
+			queue_free()
+
+func _physics_process(delta: float) -> void:
+	move_and_collide(velocity * delta)
  
-func _process(delta: float) -> void:
-	position += velocity * delta
-	
-	duration -= delta
-	
-	if duration <= 0:
-		bullet_death.emit()
-		queue_free()
+func _on_body_entered(_body):
+	is_dead = true
  
-func _on_body_entered(body):
-	# "body" here is the thing that we've hit
-	# Here we check if the body is a player, so we know to deal damage to them
-	# There are other ways to do this including class names and collision layers
-	if body.is_in_group(group):
-		visible = false
-		body.hit(self)
-		bullet_death.emit()
-		queue_free()
- 
+func _on_lifetime_timeout():
+	$AnimationPlayer.play("fade")
+	is_dead = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bymsuau0wuqdh"]
+[gd_scene load_steps=9 format=3 uid="uid://bymsuau0wuqdh"]
 
 [ext_resource type="Script" path="res://scripts/bulletDefault.gd" id="1_swi5t"]
 [ext_resource type="Texture2D" uid="uid://cwb8fehea7ktu" path="res://assets/sprites/bulletGood.png" id="2_ghfp7"]
@@ -18,10 +18,36 @@ scale_min = 0.02
 scale_max = 0.02
 color = Color(0.309804, 1, 1, 1)
 
-[node name="Area2D" type="Area2D"]
-top_level = true
+[sub_resource type="Animation" id="Animation_hthaq"]
+resource_name = "fade"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1e-05, 1e-05)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l6gau"]
+_data = {
+"fade": SubResource("Animation_hthaq")
+}
+
+[node name="PlayerBullet" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 2
+mass = 0.01
+gravity_scale = 0.0
+lock_rotation = true
+max_contacts_reported = 1
+contact_monitor = true
 script = ExtResource("1_swi5t")
-group = "enemies"
+damage = 1.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
@@ -36,7 +62,6 @@ color = Color(0, 0.66002, 0.664697, 1)
 texture = ExtResource("3_0adg3")
 
 [node name="DeathExplosion" type="GPUParticles2D" parent="."]
-visible = false
 emitting = false
 amount = 35
 process_material = SubResource("ParticleProcessMaterial_yeydr")
@@ -44,3 +69,15 @@ texture = ExtResource("4_fnbdr")
 lifetime = 0.2
 one_shot = true
 explosiveness = 0.9
+
+[node name="Lifetime" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_l6gau")
+}
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Lifetime" to="." method="_on_lifetime_timeout"]
